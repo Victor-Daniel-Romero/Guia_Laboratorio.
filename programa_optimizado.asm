@@ -1,0 +1,34 @@
+.data
+    vector_x: .word 1,2,3,4,5,6,7,8
+    vector_y: .space 32
+    const_a:  .word 3
+    const_b:  .word 5
+    tamano:   .word 8
+
+.text
+.globl main
+
+main:
+    la   $s0, vector_x
+    la   $s1, vector_y
+    lw   $t0, const_a
+    lw   $t1, const_b
+    lw   $t2, tamano      # contador
+
+loop:
+    lw   $t6, 0($s0)      # IF
+
+    addi $s0, $s0, 4      # separar lw de mul
+    addi $t2, $t2, -1     # actualizar contador
+
+    mul  $t7, $t6, $t0    # ya no inmediato al lw
+    addu $t8, $t7, $t1
+
+    sw   $t8, 0($s1)
+    addi $s1, $s1, 4
+
+    bgtz $t2, loop
+
+fin:
+    li $v0, 10
+    syscall
